@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetNode Control — Автоматизированный мониторинг сетевых узлов</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --border: #e2e8f0;
+            --accent-bg: #f1f5f9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 0 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 0;
+        }
+
+        /* Хедер */
+        header {
+            text-align: center;
+            margin-bottom: 5rem;
+            padding: 2rem 0;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            color: #0f172a;
+            margin-bottom: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        header p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Заголовки секций */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-top: 5rem;
+            margin-bottom: 3rem;
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        /* Секция: Преимущества */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: #0f172a;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            text-align: justify;
+        }
+
+        /* Секция: Как это работает */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .step-card {
+            background: var(--accent-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .step-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #cbd5e1;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .step-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .step-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Секция: Тарифы */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .price-card {
+            background: var(--card-bg);
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .price-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px -5px rgba(0,0,0,0.05);
+        }
+
+        .price-card.popular {
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.15);
+        }
+
+        .badge {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            background: #dbeafe;
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.8rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .price-card h4 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .price-card .term {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .price-card .cost {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 2rem;
+        }
+
+        .price-card .cost span {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .btn {
+            display: block;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.9rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Секция: FAQ */
+        .faq-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .faq-item {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-item h4 {
+            font-size: 1.1rem;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-item p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            text-align: justify;
+        }
+
+        /* Футер */
+        footer {
+            margin-top: 6rem;
+            border-top: 1px solid var(--border);
+            padding-top: 3rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .legal-info {
+            line-height: 1.8;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .legal-info p {
+            margin-bottom: 0.4rem;
+        }
+
+        code {
+            background: var(--accent-bg);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #0f172a;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.2rem; }
+            .section-title { font-size: 1.6rem; margin-top: 3.5rem; }
+            .container { padding: 2rem 0; }
+            .price-card { padding: 2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <h1>NetNode Control</h1>
+            <p>Автоматизированные облачные решения для непрерывного мониторинга удаленных серверов, доступности сайтов и сетевой инфраструктуры</p>
+        </header>
+
+        <section class="features">
+            <div class="feature-card">
+                <h3>Аптайм контроль 24/7</h3>
+                <p>Наша распределенная облачная система выполняет автоматические запросы к вашим сетевым узлам каждую минуту. Полный контроль доступности без пауз, выходных и праздников.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Умное логирование</h3>
+                <p>Система мгновенно фиксирует любые изменения в скорости ответа узла (RTT), сетевые задержки или потерю пакетов данных, формируя наглядную лог-выборку.</p>
+            </div>
+            <div class="feature-card">
+                <h3>100% Автоматизация</h3>
+                <p>Исключен человеческий фактор. Весь процесс — от момента оформления подписки до выделения мониторинговых мощностей под ваш узел — происходит автоматически на стороне нашего ПО.</p>
+            </div>
+        </section>
+
+        <h2 class="section-title">Как устроен процесс мониторинга</h2>
+        <section class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">01</div>
+                <h4>Выбор тарифа</h4>
+                <p>Определите необходимый период действия автоматической подписки на панели ниже.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">02</div>
+                <h4>Безопасная оплата</h4>
+                <p>Произведите моментальную оплату подписки в безналичном формате через шлюз ЮKassa.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">03</div>
+                <h4>Привязка узла</h4>
+                <p>Укажите IP-адрес или домен вашего узла в полученной автоматической панели управления.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">04</div>
+                <h4>Круглосуточный контроль</h4>
+                <p>ПО начинает пинговать и собирать статистику доступности узла в режиме реального времени.</p>
+            </div>
+        </section>
+
+        <h2 class="section-title">Тарифные планы подписки</h2>
+        <section class="pricing-grid">
+            
+            <div class="price-card">
+                <h4>Пакет «Старт»</h4>
+                <div class="term">Автоматический мониторинг 1 сетевого узла</div>
+                <div class="cost">300 ₽<span>/ 1 мес</span></div>
+                <a href="https://t.me/T_Zhygalovskaya" class="btn">Оформить доступ</a>
+            </div>
+
+            <div class="price-card popular">
+                <div class="badge">Популярный</div>
+                <h4>Пакет «Стандарт»</h4>
+                <div class="term">Автоматический мониторинг 1 сетевого узла</div>
+                <div class="cost">800 ₽<span>/ 3 мес</span></div>
+                <a href="https://t.me/T_Zhygalovskaya" class="btn">Оформить доступ</a>
+            </div>
+
+            <div class="price-card">
+                <h4>Пакет «Про»</h4>
+                <div class="term">Автоматический мониторинг 1 сетевого узла</div>
+                <div class="cost">1500 ₽<span>/ 6 мес</span></div>
+                <a href="https://t.me/T_Zhygalovskaya" class="btn">Оформить доступ</a>
+            </div>
+        </section>
+
+        <h2 class="section-title">Часто задаваемые вопросы</h2>
+        <section class="faq-container">
+            <div class="faq-item">
+                <h4>Что понимается под «сетевым узлом» в рамках мониторинга?</h4>
+                <p>Сетевым узлом может выступать любой общедоступный удаленный сервер, хост, сайт или IP-адрес (IPv4), стабильность и скорость работы которого вам необходимо отслеживать в автоматическом режиме.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Как быстро запускается мониторинг после успешной оплаты?</h4>
+                <p>Процесс полностью автоматизирован. Сразу после верификации транзакции платежной системой, алгоритмы NetNode Control генерируют маркер доступа к системе конфигурации в течение 5 минут.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Предоставляются ли официальные чеки об оплате?</h4>
+                <p>Да, в строгом соответствии с Федеральным законом № 422-ФЗ. Электронный кассовый чек Федеральной налоговой службы (ФНС) автоматически формируется и высылается на указанный вами при оплате e-mail.</p>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-links">
+                <a href="offer.html">Публичная оферта</a>
+                <a href="privacy.html">Политика конфиденциальности</a>
+            </div>
+            <div class="legal-info">
+                <p>© 2026 NetNode Control. Все права защищены.</p>
+                <p>Исполнитель: <strong>Жигаловская Татьяна</strong></p>
+                <p>ИНН: <code>910301349170</code> | Электронная почта: <code>zhygalovskaya@yandex.ru</code></p>
+                <p>Telegram-аккаунт технической поддержки: <code>@T_Zhygalovskaya</code></p>
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>
